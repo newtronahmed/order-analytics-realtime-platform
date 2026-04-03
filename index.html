@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Streaming Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chartContainer { width: 80%; margin: auto; }
+        #orderTable { width: 80%; margin: auto; border-collapse: collapse; }
+        #orderTable th, #orderTable td { border: 1px solid #ddd; padding: 8px; }
+        #orderTable th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Order Analytics Dashboard</h1>
+    <div id="chartContainer">
+        <canvas id="orderChart"></canvas>
+    </div>
+    <table id="orderTable">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody id="orderBody">
+            <!-- Order data will be inserted here -->
+        </tbody>
+    </table>
+    <script>
+        const ctx = document.getElementById('orderChart').getContext('2d');
+        const orderChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [], // labels for time
+                datasets: [{
+                    label: 'Orders',
+                    data: [],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        const eventSource = new EventSource('/sse-endpoint'); // Replace with your SSE endpoint
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            orderChart.data.labels.push(data.time);
+            orderChart.data.datasets[0].data.push(data.orders);
+            orderChart.update();
+
+            const orderRow = `<tr>\n                <td>${data.orderId}</td>\n                <td>${data.customer}</td>\n                <td>${data.amount}</td>\n                <td>${data.status}</td>\n                <td>${data.time}</td>\n            </tr>`;
+            document.getElementById('orderBody').insertAdjacentHTML('beforeend', orderRow);
+        };
+    </script>
+</body>
+</html>
