@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "order-analytics-realtime-platform"
+version = "0.1.0"
+author = "newtronahmed"
+description = "A real-time analytics platform for order processing"
+
+[tool.poetry.dependencies]
+fastapi = "^0.68.0"
+uvicorn = "^0.15.0"
+confluent-kafka = "^1.8.0"
+requests = "^2.25.1"
+sqlalchemy = "^1.4.0"
+python-jose = "^3.3.0"
+python-multipart = "^0.0.5"
+prometheus-client = "^0.9.0"
+python-json-logger = "^2.0.0"
+tenacity = "^8.0.1"
