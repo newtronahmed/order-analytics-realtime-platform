@@ -1,0 +1,21 @@
+# Python
+*.py[cod]
+__pycache__/
+
+# Virtual Environment
+venv/
+
+# Environment Variables
+.env
+
+# macOS
+.DS_Store
+
+# PostgreSQL Data
+postgres_data/
+
+# Node Modules
+node_modules/
+
+# Log Files
+*.log
